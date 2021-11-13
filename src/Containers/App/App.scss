@@ -39,3 +39,16 @@ body {
     }
   }
 }
+
+.app-container {
+  .user-form-container {
+    border: 1px solid black;
+    .user-form-field {
+      padding-left: 100px;
+      label {
+        font-weight: bold;
+        margin-right: 10px;
+      }
+    }
+  }
+}

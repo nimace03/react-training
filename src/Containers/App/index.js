@@ -1,83 +1,91 @@
 import './App.scss';
 import React from "react";
-import FirstComponent from "../User/FirstComponent";
+import PreviewComponent from "./previewCompnent";
 
 class App extends React.Component {
   constructor(props) {
     super(props);
+    this.initialUserForm = {
+      fullName: "",
+      dateOfBrith: "",
+      occupation: "",
+      email: "",
+      address: "",
+      phoneNo: "",
+    }
     this.state = {
-      counters: 0,
-      name: "default",
-      nameObj: {
-        firstName: "Mark",
-        lastName: "Wal",
-      },
-      nameListArr: ["Hello", "world"],
-      showContainer: false,
+      userFormObj: { ...this.initialUserForm },
+      previewFormObj: null,
+      showPreviewVisibility: false,
     }
   }
-  handleChange = (key, value) => {
+  handleUserFormChange = (field, value) => {
     this.setState({
-      [key]: value,
-    })
-  }
-  handleShowChange = () => {
-    this.setState({
-      showContainer: !this.state.showContainer,
-    })
-  }
-  handleUpdateField = (key, value) => {
-    this.setState({
-      nameObj: {
-        ...this.state.nameObj,
-        [key]: value
+      userFormObj: {
+        ...this.state.userFormObj,
+        [field]: value,
       }
-    })
+    });
   }
-  handleUpdateArrField = (index, value) => {
-    let updatedNameListArr = [...this.state.nameListArr];
-    updatedNameListArr[index] = value;
+  submitAction = () => {
     this.setState({
-      nameListArr: [...updatedNameListArr]
+      previewFormObj: { ...this.state.userFormObj },
+      userFormObj: { ...this.initialUserForm },
+    })
+    this.previewVisibility();
+  }
+  previewVisibility = () => {
+    this.setState({
+      showPreviewVisibility: !this.state.showPreviewVisibility,
     })
   }
   render() {
-    const styleComponent = {
-      marginLeft: "10px",
-      marginRight: "10px"
-    }
-    const { nameListArr, counters, name } = this.state;
-    const { handleChange } = this;
+    const { userFormObj, showPreviewVisibility, previewFormObj } = this.state;
     return (
-      <div className="first-component" style={{ padding: "50px", border: "1px solid black" }}>
-        Parent Component {counters}
-        <div>
-          <label>Name State</label>
-          <input
-            style={styleComponent}
-            value={name}
-            onChange={(event) => this.handleChange("name", event.target.value)} />
-          {/* <label>First Name</label>
-          <input style={styleComponent} value={nameListArr[0]} onChange={(event) => this.handleUpdateArrField(0, event.target.value)} />
-          <label>Last Name</label>
-          <input style={styleComponent} value={nameListArr[1]} onChange={(event) => this.handleUpdateArrField(1, event.target.value)} /> */}
-          <button onClick={() => handleChange("counters", counters + 1)} style={{ marginTop: "50px", backgroundColor: "#E67E22", color: "white", borderRadius: "5px" }}>
-            Click for increment
-          </button>
-          {/* <button onClick={this.handleShowChange} style={{ marginLeft: "10px", backgroundColor: "#E67E22", color: "white", borderRadius: "5px" }}>
-            Click to show Container
-          </button> */}
-        </div>
-
-        {/* {this.state.showContainer &&
-          <div style={{ with: "200px", padding: "50px" }}>
-            Show container on condition
+      <div className="app-container">
+        <div className="user-form-container">
+          <div className="user-form-field">
+            <label>Full Name</label>
+            <input
+              placeholder="Full Name"
+              value={userFormObj.fullName}
+              onChange={(event) => this.handleUserFormChange("fullName", event.target.value)}
+            />
           </div>
+          <br />
+          <div className="user-form-field">
+            <label>Date of Birth</label>
+            <input placeholder="Date of Birth" value={userFormObj.dateOfBrith} onChange={(event) => this.handleUserFormChange("dateOfBrith", event.target.value)} />
+          </div>
+          <br />
+          <div className="user-form-field">
+            <label>Occupation</label>
+            <input placeholder="Occupation" value={userFormObj.occupation} onChange={(event) => this.handleUserFormChange("occupation", event.target.value)} />
+          </div>
+          <br />
+          <div className="user-form-field">
+            <label>Email</label>
+            <input placeholder="Email" value={userFormObj.email} onChange={(event) => this.handleUserFormChange("email", event.target.value)} />
+          </div>
+          <br />
+          <div className="user-form-field">
+            <label>Address</label>
+            <input placeholder="Address" value={userFormObj.address} onChange={(event) => this.handleUserFormChange("address", event.target.value)} />
+          </div>
+          <br />
+          <div className="user-form-field">
+            <label>Phone Number</label>
+            <input placeholder="Phone Number" value={userFormObj.phoneNo} onChange={(event) => this.handleUserFormChange("phoneNo", event.target.value)} />
+          </div>
+          <button onClick={this.submitAction}>Submit</button>
+        </div>
+        <br />
+        {showPreviewVisibility &&
+          <PreviewComponent
+            previewObj={previewFormObj}
+            modalVisibility={this.previewVisibility}
+          />
         }
-        <FirstComponent
-          counters={this.state.counters}
-          handleChange={this.handleChange}
-        /> */}
       </div>
     );
   }
