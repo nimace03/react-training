@@ -1,8 +1,8 @@
 import './App.scss';
-import React from "react";
-import PreviewComponent from "./previewCompnent";
+import { Component } from "react";
+import PreviewComponent from "../Common/previewCompnent";
 
-class App extends React.Component {
+class App extends Component {
   constructor(props) {
     super(props);
     this.initialUserForm = {
@@ -41,8 +41,11 @@ class App extends React.Component {
   }
   render() {
     const { userFormObj, showPreviewVisibility, previewFormObj } = this.state;
+    const styleComponent = {
+      backgroundColor: "#D0D3D4"
+    }
     return (
-      <div className="app-container">
+      <div className="app-container" style={styleComponent}>
         <div className="user-form-container">
           <div className="user-form-field">
             <label>Full Name</label>
