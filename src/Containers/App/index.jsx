@@ -1,91 +1,36 @@
 import './App.scss';
 import { Component } from "react";
+import autoBind from "react-autobind";
+
+import UserComponent from "../User";
 import PreviewComponent from "../Common/previewCompnent";
 
 class App extends Component {
   constructor(props) {
     super(props);
-    this.initialUserForm = {
-      fullName: "",
-      dateOfBrith: "",
-      occupation: "",
-      email: "",
-      address: "",
-      phoneNo: "",
-    }
     this.state = {
-      userFormObj: { ...this.initialUserForm },
-      previewFormObj: null,
-      showPreviewVisibility: false,
+      previewData: null,
+      previewVisibility: false,
     }
+    autoBind(this);
   }
-  handleUserFormChange = (field, value) => {
+  previewVisibility(previewData = null) {
     this.setState({
-      userFormObj: {
-        ...this.state.userFormObj,
-        [field]: value,
-      }
-    });
-  }
-  submitAction = () => {
-    this.setState({
-      previewFormObj: { ...this.state.userFormObj },
-      userFormObj: { ...this.initialUserForm },
-    })
-    this.previewVisibility();
-  }
-  previewVisibility = () => {
-    this.setState({
-      showPreviewVisibility: !this.state.showPreviewVisibility,
+      previewData,
+      previewVisibility: !this.state.previewVisibility,
     })
   }
   render() {
-    const { userFormObj, showPreviewVisibility, previewFormObj } = this.state;
-    const styleComponent = {
-      backgroundColor: "#D0D3D4"
-    }
+    const { previewData, previewVisibility } = this.state;
     return (
-      <div className="app-container" style={styleComponent}>
-        <div className="user-form-container">
-          <div className="user-form-field">
-            <label>Full Name</label>
-            <input
-              placeholder="Full Name"
-              value={userFormObj.fullName}
-              onChange={(event) => this.handleUserFormChange("fullName", event.target.value)}
-            />
-          </div>
-          <br />
-          <div className="user-form-field">
-            <label>Date of Birth</label>
-            <input placeholder="Date of Birth" value={userFormObj.dateOfBrith} onChange={(event) => this.handleUserFormChange("dateOfBrith", event.target.value)} />
-          </div>
-          <br />
-          <div className="user-form-field">
-            <label>Occupation</label>
-            <input placeholder="Occupation" value={userFormObj.occupation} onChange={(event) => this.handleUserFormChange("occupation", event.target.value)} />
-          </div>
-          <br />
-          <div className="user-form-field">
-            <label>Email</label>
-            <input placeholder="Email" value={userFormObj.email} onChange={(event) => this.handleUserFormChange("email", event.target.value)} />
-          </div>
-          <br />
-          <div className="user-form-field">
-            <label>Address</label>
-            <input placeholder="Address" value={userFormObj.address} onChange={(event) => this.handleUserFormChange("address", event.target.value)} />
-          </div>
-          <br />
-          <div className="user-form-field">
-            <label>Phone Number</label>
-            <input placeholder="Phone Number" value={userFormObj.phoneNo} onChange={(event) => this.handleUserFormChange("phoneNo", event.target.value)} />
-          </div>
-          <button onClick={this.submitAction}>Submit</button>
-        </div>
-        <br />
-        {showPreviewVisibility &&
+      <div className="app-container">
+        <UserComponent
+          previewVisibility={this.previewVisibility}
+          isVisibility={previewVisibility}
+        />
+        {previewVisibility &&
           <PreviewComponent
-            previewObj={previewFormObj}
+            previewObj={previewData}
             modalVisibility={this.previewVisibility}
           />
         }

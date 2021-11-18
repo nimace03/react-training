@@ -5,37 +5,33 @@ function PreviewComponent(props) {
     return (
         <>
             <br />
-            <div className="user-form-container">
+            <div className="preview-container">
                 <div className="user-form-field">
-                    <label>Full Name</label>
-                    <label>{previewObj.fullName}</label>
+                    <label className="user-label">Full Name</label>
+                    <div className="user-detail">{previewObj.fullName}</div>
+                </div>
+                <div className="user-form-field">
+                    <label className="user-label">Date of Birth</label>
+                    <div className="user-detail">{previewObj.dateOfBrith}</div>
+                </div>
+                <div className="user-form-field">
+                    <label className="user-label">Occupation</label>
+                    <div className="user-detail">{previewObj.occupation}</div>
+                </div>
+                <div className="user-form-field">
+                    <label className="user-label">Email</label>
+                    <div className="user-detail">{previewObj.email}</div>
+                </div>
+                <div className="user-form-field">
+                    <label className="user-label">Address</label>
+                    <div className="user-detail">{previewObj.address}</div>
+                </div>
+                <div className="user-form-field">
+                    <label className="user-label">Phone Number</label>
+                    <div className="user-detail">{previewObj.phoneNo}</div>
                 </div>
                 <br />
-                <div className="user-form-field">
-                    <label>Date of Birth</label>
-                    <label>{previewObj.dateOfBrith}</label>
-                </div>
-                <br />
-                <div className="user-form-field">
-                    <label>Occupation</label>
-                    <label>{previewObj.occupation}</label>
-                </div>
-                <br />
-                <div className="user-form-field">
-                    <label>Email</label>
-                    <label>{previewObj.email}</label>
-                </div>
-                <br />
-                <div className="user-form-field">
-                    <label>Address</label>
-                    <label>{previewObj.address}</label>
-                </div>
-                <br />
-                <div className="user-form-field">
-                    <label>Phone Number</label>
-                    <label>{previewObj.phoneNo}</label>
-                </div>
-                <button onClick={modalVisibility}>close</button>
+                <button className="close-preview-btn" onClick={modalVisibility}>close</button>
             </div>
         </>
     );
