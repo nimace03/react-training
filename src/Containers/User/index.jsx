@@ -25,7 +25,7 @@ class UserComponent extends Component {
       address,
       phoneNo,
     } = this.state;
-    if (!(fullName && email && occupation)) {
+    if (!(fullName)) {
       this.setState({ isError: true })
       return;
     }
