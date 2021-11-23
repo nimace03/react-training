@@ -1,5 +1,6 @@
 import './App.scss';
 import { Component } from "react";
+import "antd/dist/antd.css";
 import autoBind from "react-autobind";
 
 import UserComponent from "../User";

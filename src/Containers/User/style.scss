@@ -1,29 +1,28 @@
 .user-container {
-    width: 500px;
-    .user-field {
-        margin-top: 10px;
-        .user-label {
-            float: left;
-            width: 125px;
-            margin-right: 20px;
-        }
-        .user-input {
-        }
-        .user-error {
-            color: red;
-        }
-    }
-    .user-submit-btn {
-        border: 1px solid #cacfd2;
-        border-radius: 5px;
-        color: white;
-        background-color: #58d68d;
-    }
-    .user-submit-btn-disabled {
-        cursor: not-allowed;
-        border: 1px solid #cacfd2;
-        border-radius: 5px;
-        color: white;
-        background-color: #cacfd2;
-    }
+    // .user-field {
+    //     margin-top: 10px;
+    //     .user-label {
+    //         float: left;
+    //         width: 125px;
+    //         margin-right: 20px;
+    //     }
+    //     .user-input {
+    //     }
+    //     .user-error {
+    //         color: red;
+    //     }
+    // }
+    // .user-submit-btn {
+    //     border: 1px solid #cacfd2;
+    //     border-radius: 5px;
+    //     color: white;
+    //     background-color: #58d68d;
+    // }
+    // .user-submit-btn-disabled {
+    //     cursor: not-allowed;
+    //     border: 1px solid #cacfd2;
+    //     border-radius: 5px;
+    //     color: white;
+    //     background-color: #cacfd2;
+    // }
 }
