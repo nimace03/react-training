@@ -17,6 +17,12 @@ class UserComponent extends Component {
     }
     autoBind(this);
   }
+  componentDidUpdate(prevProps, prevState) {
+    if (this.props.isVisibility !== prevProps.isVisibility && this.props.isVisibility) {
+      console.log("Preview modal displayed in app js")
+    }
+  }
+  
   handleClick() {
     const {
       fullName,
@@ -39,7 +45,7 @@ class UserComponent extends Component {
       phoneNo,
     });
     this.setState({
-      fullName: "",
+      // fullName: "",
       dateOfBrith: "",
       occupation: "",
       email: "",

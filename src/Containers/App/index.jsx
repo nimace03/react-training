@@ -15,6 +15,9 @@ class App extends Component {
     }
     autoBind(this);
   }
+  componentDidMount() {
+    console.log("Component method called for first time ")
+  }
   previewVisibility(previewData = null) {
     this.setState({
       previewData,
