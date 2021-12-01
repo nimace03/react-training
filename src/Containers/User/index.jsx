@@ -18,11 +18,18 @@ class UserComponent extends Component {
     autoBind(this);
   }
   componentDidUpdate(prevProps, prevState) {
-    if (this.props.isVisibility !== prevProps.isVisibility && this.props.isVisibility) {
-      console.log("Preview modal displayed in app js")
+    const {
+      fullName,
+      dateOfBrith,
+      occupation,
+      email,
+      address,
+      phoneNo,
+    } = this.state;
+    if (fullName && dateOfBrith && occupation && email && address && phoneNo.length === 9) {
+      this.handleClick();
     }
   }
-  
   handleClick() {
     const {
       fullName,
@@ -45,7 +52,7 @@ class UserComponent extends Component {
       phoneNo,
     });
     this.setState({
-      // fullName: "",
+      fullName: "",
       dateOfBrith: "",
       occupation: "",
       email: "",
@@ -58,6 +65,8 @@ class UserComponent extends Component {
     this.setState({
       [field]: value,
       isError: false,
+    }, () => {
+      console.log(this.state.fullName)
     })
   }
   render() {

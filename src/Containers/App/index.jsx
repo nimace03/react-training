@@ -4,6 +4,7 @@ import "antd/dist/antd.css";
 import autoBind from "react-autobind";
 
 import UserComponent from "../User";
+import UserFuncComponent from "../UserFuncComponent";
 import PreviewComponent from "../Common/previewCompnent";
 
 class App extends Component {
@@ -15,20 +16,26 @@ class App extends Component {
     }
     autoBind(this);
   }
-  componentDidMount() {
-    console.log("Component method called for first time ")
-  }
-  previewVisibility(previewData = null) {
+  previewVisibility(previewData = {}) {
     this.setState({
       previewData,
       previewVisibility: !this.state.previewVisibility,
+    })
+  }
+  resetPreviewState() {
+    this.setState({
+      previewData: null
     })
   }
   render() {
     const { previewData, previewVisibility } = this.state;
     return (
       <div className="app-container">
-        <UserComponent
+        {/* <UserComponent
+          previewVisibility={this.previewVisibility}
+          isVisibility={previewVisibility}
+        /> */}
+        <UserFuncComponent
           previewVisibility={this.previewVisibility}
           isVisibility={previewVisibility}
         />
@@ -36,6 +43,7 @@ class App extends Component {
           <PreviewComponent
             previewObj={previewData}
             modalVisibility={this.previewVisibility}
+            resetPreviewState={this.resetPreviewState}
           />
         }
       </div>

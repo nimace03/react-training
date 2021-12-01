@@ -1,9 +1,16 @@
+import { useEffect } from 'react';
 import '../App/App.scss';
 import { Modal } from "antd";
 import { Row, Col } from "antd";
 
-function PreviewComponent(props) {
+const PreviewComponent = (props) => {
     const { previewObj, modalVisibility } = props;
+    useEffect(() => {
+        return () => {
+            console.log("Component will unmount ")
+            props.resetPreviewState();
+        }
+    }, []);
     return (
         <Modal
             title="Preview User Details"
