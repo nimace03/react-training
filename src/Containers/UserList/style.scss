@@ -1,0 +1,18 @@
+.user-list-container {
+    margin-top: 20px;
+    padding-top: 30px;
+    border-top: 1px solid #b3b6b7;
+    .user-list-empty {
+        text-align: center;
+        font-weight: bold;
+        font-size: 18px;
+    }
+    .user-list-field {
+        border: 1px solid black;
+        padding: 11px;
+        .user-list-label,
+        .user-list-email {
+            float: left;
+        }
+    }
+}

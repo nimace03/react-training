@@ -1,50 +1,51 @@
 import { useState, useEffect } from 'react';
-import { Row, Col, Button } from "antd";
+import { Row, Col, Button, message } from "antd";
 import './style.scss';
 
 const UserFuncComponent = (props) => {
   const [userFuncObj, handleUserObjChange] = useState({
+    fullName: "",
     dateOfBrith: "",
     occupation: "",
     email: "",
     address: "",
     phoneNo: "",
     isError: false,
-    isSubmitEnabled: false,
   });
-  const [fullName, handleFullNameChange] = useState("");
-
   useEffect(() => {
-    const { dateOfBrith, occupation, email, address, phoneNo } = userFuncObj;
-    if (dateOfBrith && occupation && email && address && phoneNo.length > 9) {
-      console.log("Userobj State Change ")
-      console.log(userFuncObj)
-    } else if (!isSubmitEnabled) {
-      handleUserObjChange({
-        ...userFuncObj,
-        isSubmitEnabled: true,
-      });
+    if (props.isSubmittedData) {
+      message.success("User data store successfully.")
+      props.resetSubmittedData();
     }
-  }, [userFuncObj]);
-
-  useEffect(() => {
-    if (props.isVisibility)
-      console.log("Props change State in app")
-  }, [props]);
-
+  }, [props])
   const handleChange = (key, value) => {
     handleUserObjChange({
       ...userFuncObj,
       [key]: value,
-      isSubmitEnabled: false,
       isError: false,
     });
   }
   const submitAction = () => {
+    const {
+      fullName,
+      dateOfBrith,
+      occupation,
+      email,
+      address,
+      phoneNo,
+    } = userFuncObj;
     if (!(fullName && dateOfBrith && occupation && email && address && phoneNo))
       handleUserObjChange({ ...userFuncObj, isError: true });
-    props.previewVisibility({ ...userFuncObj });
+    props.submitAction({
+      fullName,
+      dateOfBrith,
+      occupation,
+      email,
+      address,
+      phoneNo,
+    });
     handleUserObjChange({
+      fullName: "",
       dateOfBrith: "",
       occupation: "",
       email: "",
@@ -54,15 +55,14 @@ const UserFuncComponent = (props) => {
     });
   }
   const {
+    fullName,
     dateOfBrith,
     occupation,
     email,
     address,
     phoneNo,
     isError,
-    isSubmitEnabled,
   } = userFuncObj;
-
   return (
     <div className="user-container">
       <Row gutter={[10, 10]}>
@@ -70,7 +70,7 @@ const UserFuncComponent = (props) => {
           <label className="user-label">Full Name </label>
         </Col>
         <Col span={12}>
-          <input className="user-input" type="text" value={fullName} onChange={(event) => handleFullNameChange(event.target.value)} />
+          <input className="user-input" type="text" value={fullName} onChange={(event) => handleChange("fullName", event.target.value)} />
         </Col>
         <Col span={12}>
           <label className="user-label">Date Of Brith </label>
@@ -108,9 +108,7 @@ const UserFuncComponent = (props) => {
         <Col span={24}>
           <Button
             type="primary"
-            className={props.isVisibility ? "user-submit-btn-disabled" : "user-submit-btn"}
             onClick={submitAction}
-            disabled={isSubmitEnabled}
           >
             Submit
           </Button>
