@@ -2,12 +2,17 @@ import './App.scss';
 import { Component } from "react";
 import "antd/dist/antd.css";
 import autoBind from "react-autobind";
-
+import { Button, message, Spin } from "antd";
+import { LoadingOutlined } from '@ant-design/icons';
 // import UserComponent from "../User";
 import UserFuncComponent from "../UserFuncComponent";
+import UserFormComponent from "../UserForm";
 import UserDataListComponent from "../UserList";
 import PreviewComponent from "../Common/previewCompnent";
 
+import { getUserList, updatedUserPost } from "./api";
+
+const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
 class App extends Component {
   constructor(props) {
     super(props);
@@ -17,10 +22,32 @@ class App extends Component {
       previewData: null,
       previewVisibility: false,
       isSubmittedData: false,
+      succeededFetchUserData: false,
+      succeededUpdateUserData: false,
+      isLoading: false,
     }
     autoBind(this);
   }
-  previewVisibility(previewData = {}) {
+  componentDidMount() {
+    // this.getAllUserData();
+  }
+  componentDidUpdate(prevProps) {
+    if (this.state.succeededFetchUserData !== prevProps.succeededFetchUserData &&
+      this.state.succeededFetchUserData) {
+      this.setState({
+        succeededFetchUserData: false,
+      })
+      message.success("Successfully fetch user data.")
+    }
+    if (this.state.succeededUpdateUserData !== prevProps.succeededUpdateUserData &&
+      this.state.succeededUpdateUserData) {
+      this.setState({
+        succeededUpdateUserData: false,
+      })
+      message.success("Successfully added New user data.")
+    }
+  }
+  previewVisibilityAction(previewData = {}) {
     this.setState({
       previewData,
       previewVisibility: !this.state.previewVisibility,
@@ -44,23 +71,79 @@ class App extends Component {
       isSubmittedData: false,
     })
   }
+  getAllUserData() {
+    this.setState({ isLoading: true, })
+    const getUserData = getUserList();
+    getUserData.then((data) => {
+      if (data && data.length > 0) {
+        this.setState({
+          userListData: [...data.map(list => ({
+            ...list,
+            fullName: list.name,
+          }))],
+          succeededFetchUserData: true,
+          isLoading: false,
+        });
+      }
+    })
+  }
+  async getAllUserDataAsync() {
+    this.setState({ isLoading: true, })
+    const getUserData = await getUserList();
+    if (getUserData && getUserData.length > 0) {
+      this.setState({
+        userListData: [...getUserData.map(list => ({
+          ...list,
+          fullName: list.name,
+        }))],
+        succeededFetchUserData: true,
+      });
+    }
+    this.setState({ isLoading: false, })
+  }
+  async updateUserDataAsync(data) {
+    this.setState({ isLoading: true, })
+    const payload = {
+      title: data.title,
+      body: data.body,
+      userId: 1,
+    }
+    const updatedUserData = await updatedUserPost(payload);
+    if (updatedUserData) {
+      const updateduserListData = [...this.state.userListData];
+      updateduserListData.push(updatedUserData);
+      this.setState({
+        userListData: [...updateduserListData.map(list => ({
+          ...list,
+          fullName: list.name,
+        }))],
+        succeededUpdateUserData: true,
+      });
+    }
+    this.setState({ isLoading: false, })
+  }
   render() {
-    const { previewData, previewVisibility, isSubmittedData } = this.state;
+    const { previewData, previewVisibility, isSubmittedData, isLoading } = this.state;
     return (
       <div className="app-container">
-        <UserFuncComponent
+        <Spin indicator={antIcon} spinning={isLoading} />
+        <Button onClick={this.getAllUserDataAsync}>Api Call</Button>
+        {/* <UserFuncComponent
           submitAction={this.saveUserDataAction}
           isSubmittedData={isSubmittedData}
           resetSubmittedData={this.resetSubmittedData}
+        /> */}
+        <UserFormComponent
+          submitAction={this.updateUserDataAsync}
         />
         <UserDataListComponent
           userListData={this.state.userListData}
-          previewVisibility={this.previewVisibility}
+          previewVisibility={this.previewVisibilityAction}
         />
         {previewVisibility &&
           <PreviewComponent
             previewObj={previewData}
-            modalVisibility={this.previewVisibility}
+            modalVisibility={this.previewVisibilityAction}
             resetPreviewState={this.resetPreviewState}
           />
         }

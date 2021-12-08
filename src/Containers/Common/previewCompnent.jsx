@@ -22,38 +22,38 @@ const PreviewComponent = (props) => {
                     <label className="user-label">Full Name</label>
                 </Col>
                 <Col span={12}>
-                    <div className="user-detail">{previewObj.fullName}</div>
+                    <div className="user-detail">{(previewObj.fullName || "")}</div>
                 </Col>
                 <Col span={12}>
                     <label className="user-label">Date of Birth</label>
                 </Col>
                 <Col span={12}>
-                    <div className="user-detail">{previewObj.dateOfBrith}</div>
+                    <div className="user-detail">{(previewObj.dateOfBrith || "")}</div>
                 </Col>
-                <Col span={12}>
+                {/*<Col span={12}> 
                     <label className="user-label">Occupation</label>
                 </Col>
                 <Col span={12}>
-                    <div className="user-detail">{previewObj.occupation}</div>
+                    <div className="user-detail">{(previewObj.occupation || "")}</div>
                 </Col>
                 <Col span={12}>
                     <label className="user-label">Email</label>
                 </Col>
                 <Col span={12}>
-                    <div className="user-detail">{previewObj.email}</div>
+                    <div className="user-detail">{(previewObj.email || "")}</div>
                 </Col>
                 <Col span={12}>
                     <label className="user-label">Address</label>
                 </Col>
                 <Col span={12}>
-                    <div className="user-detail">{previewObj.address}</div>
+                    <div className="user-detail">{(previewObj.address || "")}</div>
                 </Col>
                 <Col span={12}>
                     <label className="user-label">Phone Number</label>
                 </Col>
                 <Col span={12}>
-                    <div className="user-detail">{previewObj.phoneNo}</div>
-                </Col>
+                    <div className="user-detail">{(previewObj.phoneNo || "")}</div>
+                </Col> */}
             </Row>
         </Modal>
     );
