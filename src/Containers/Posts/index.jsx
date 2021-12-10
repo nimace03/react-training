@@ -1,6 +1,7 @@
 import { Component } from "react";
 import { Row, Col, Button } from "antd";
 import autoBind from "react-autobind";
+import PostListComponent from "./postList";
 import './style.scss';
 
 class UserComponent extends Component {
@@ -61,7 +62,8 @@ class UserComponent extends Component {
             </Button>
           </Col>
         </Row>
-
+        <hr />
+        <PostListComponent />
       </div>
     );
   }

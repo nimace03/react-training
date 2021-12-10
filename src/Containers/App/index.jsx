@@ -6,9 +6,10 @@ import { Button, message, Spin } from "antd";
 import { LoadingOutlined } from '@ant-design/icons';
 // import UserComponent from "../User";
 import UserFuncComponent from "../UserFuncComponent";
-import UserFormComponent from "../UserForm";
+import PostComponent from "../Posts";
 import UserDataListComponent from "../UserList";
 import PreviewComponent from "../Common/previewCompnent";
+import UserEditModal from "../Common/userEditModal";
 
 import { getUserList, updatedUserPost } from "./api";
 
@@ -19,12 +20,15 @@ class App extends Component {
     // const userData = JSON.parse('[{"fullName":"nimesh","dateOfBrith":"11/11/11","occupation":"frontend","email":"nimesh@mail.com","address":"ktm","phoneNo":"1234567890"},{"fullName":"Leanne Graham","dateOfBrith":"11/22/11","occupation":"frontend","email":"Sincere@april.biz","address":"Gwenborough","phoneNo":"567890"},{"fullName":"Ervin Howell","dateOfBrith":"22/11/11","occupation":"software developer","email":"Shanna@melissa.tv","address":"Wisokyburgh","phoneNo":"23456789"},{"fullName":"Clementine Bauch","dateOfBrith":"12/6/21","occupation":"QA","email":"Nathan@yesenia.net","address":"McKenziehaven","phoneNo":"555-5555"},{"fullName":"Patricia Lebsack","dateOfBrith":"4/5/21","occupation":"frontend","email":"Julianne.OConner@kory.org","address":"South Elvis","phoneNo":"53919-4257"},{"fullName":"Chelsey Dietrich","dateOfBrith":"2/4/21","occupation":"Manager","email":"Lucio_Hettinger@annie.ca","address":"Roscoeview","phoneNo":"33263"}]');
     this.state = {
       userListData: [],
+      postListData: [],
       previewData: null,
       previewVisibility: false,
       isSubmittedData: false,
       succeededFetchUserData: false,
       succeededUpdateUserData: false,
       isLoading: false,
+      selectedUserData: null,
+      userEditVisibility: false,
     }
     autoBind(this);
   }
@@ -79,7 +83,6 @@ class App extends Component {
         this.setState({
           userListData: [...data.map(list => ({
             ...list,
-            fullName: list.name,
           }))],
           succeededFetchUserData: true,
           isLoading: false,
@@ -94,7 +97,8 @@ class App extends Component {
       this.setState({
         userListData: [...getUserData.map(list => ({
           ...list,
-          fullName: list.name,
+          userAddress: list.address && list.address.city,
+          userCompany: list.company && list.company.name,
         }))],
         succeededFetchUserData: true,
       });
@@ -122,29 +126,73 @@ class App extends Component {
     }
     this.setState({ isLoading: false, })
   }
+  deleteUserListAction(userId) {
+    let updatedUserList = [...this.state.userListData];
+    updatedUserList = updatedUserList.filter(list => list.id !== userId);
+    this.setState({
+      userListData: [...updatedUserList],
+    })
+    message.success("User data deleted.");
+  }
+  updateSelectedUser() {
+    let updatedUserList = [...this.state.userListData];
+    let getUserIndex = updatedUserList.findIndex(list => list.id === this.state.selectedUserData.id);
+    updatedUserList[getUserIndex] = this.state.selectedUserData;
+    this.setState({
+      userListData: [...updatedUserList],
+    });
+    message.success("User data updated.");
+    this.userEditVisibilityAction();
+  }
+  handleChangeEditUser(key, value) {
+    this.setState({
+      selectedUserData: {
+        ...this.state.selectedUserData,
+        [key]: value,
+      }
+    })
+  }
+  userEditVisibilityAction(selectedUserData = null) {
+    this.setState({
+      selectedUserData,
+      userEditVisibility: selectedUserData ? true : false,
+    })
+  }
   render() {
-    const { previewData, previewVisibility, isSubmittedData, isLoading } = this.state;
+    const { previewData,
+      previewVisibility,
+      isSubmittedData,
+      isLoading,
+      userEditVisibility,
+    } = this.state;
     return (
       <div className="app-container">
-        <Spin indicator={antIcon} spinning={isLoading} />
+        <Spin className="app-loading" indicator={antIcon} spinning={isLoading} />
         <Button onClick={this.getAllUserDataAsync}>Api Call</Button>
-        {/* <UserFuncComponent
+        <UserFuncComponent
           submitAction={this.saveUserDataAction}
           isSubmittedData={isSubmittedData}
           resetSubmittedData={this.resetSubmittedData}
-        /> */}
-        <UserFormComponent
-          submitAction={this.updateUserDataAsync}
         />
         <UserDataListComponent
           userListData={this.state.userListData}
-          previewVisibility={this.previewVisibilityAction}
+          editUserListAction={this.userEditVisibilityAction}
+          deleteUserListAction={this.deleteUserListAction}
+          previewVisibilityAction={this.previewVisibilityAction}
         />
         {previewVisibility &&
           <PreviewComponent
             previewObj={previewData}
             modalVisibility={this.previewVisibilityAction}
             resetPreviewState={this.resetPreviewState}
+          />
+        }
+        {userEditVisibility &&
+          <UserEditModal
+            userData={this.state.selectedUserData}
+            submitAction={this.updateSelectedUser}
+            handleChange={this.handleChangeEditUser}
+            modalVisibility={this.userEditVisibilityAction}
           />
         }
       </div>

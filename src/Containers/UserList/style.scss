@@ -15,4 +15,22 @@
             float: left;
         }
     }
+    .user-name-colored-field {
+        font-weight: bold;
+        color: red;
+    }
+    .user-name-field {
+        font-weight: bold;
+    }
+    .user-action {
+        .user-preview,
+        .user-edit,
+        .user-delete {
+            font-size: 18px;
+        }
+        .user-edit,
+        .user-delete {
+            margin-left: 10px;
+        }
+    }
 }
