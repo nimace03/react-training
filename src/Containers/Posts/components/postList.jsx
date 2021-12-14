@@ -1,5 +1,5 @@
 import { Row, Col, Button } from "antd";
-import './style.scss';
+import '../style.scss';
 
 const PostListComponent = (props) => {
     if (props.userListData.length === 0)
