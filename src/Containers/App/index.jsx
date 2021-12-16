@@ -1,41 +1,11 @@
-import { Component } from "react";
-import { Routes, Route, Link } from "react-router-dom";
-import autoBind from "react-autobind";
-import './App.scss';
+import AppComponent from "./components";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 
-import UserComponent from "../User";
-import PostComponent from "../Posts";
+const AppComponentWithRouter = () => {
+  let getLocation = useLocation();
+  let getNav = useNavigate();
+  let getParam = useParams();
+  return <AppComponent history={getLocation} navigate={getNav} urlParam={getParam} />;
+};
 
-class App extends Component {
-  constructor(props) {
-    super(props);
-    autoBind(this);
-  }
-  render() {
-    return (
-      <div className="app-container">
-        <div className="app-header">
-          <div className="app-header-list">
-            <Link to="/">User</Link>
-          </div>
-          <div className="app-header-list">
-            <Link to="/posts">Post</Link>
-          </div>
-        </div>
-        <br />
-        <Routes>
-          <Route
-            path="/"
-            element={<UserComponent />}
-          />
-          <Route
-            path="/posts"
-            element={<PostComponent />}
-          />
-        </Routes>
-      </div >
-    );
-  }
-}
-
-export default App;
+export default AppComponentWithRouter;

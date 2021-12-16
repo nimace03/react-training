@@ -7,7 +7,7 @@ import { LoadingOutlined } from '@ant-design/icons';
 // import UserComponent from "../User";
 import UserDataListComponent from "./UserList";
 
-import { getUserList, updatedUserPost } from "../../App/api";
+import { getUserList, updatedUserPost } from "../api";
 const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
 class UserComponent extends Component {
   constructor(props) {

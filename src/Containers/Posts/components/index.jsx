@@ -2,6 +2,7 @@ import { Component } from "react";
 import { Row, Col, Button } from "antd";
 import autoBind from "react-autobind";
 import PostListComponent from "./postList";
+import { getPostList } from "../api";
 import '../style.scss';
 
 class UserComponent extends Component {
@@ -10,11 +11,13 @@ class UserComponent extends Component {
     this.state = {
       title: "",
       body: "",
+      postList: [],
     }
     autoBind(this);
   }
   componentDidMount() {
     console.log(this.props)
+    this.getPostListAction();
   }
   handleClick() {
     const {
@@ -36,10 +39,19 @@ class UserComponent extends Component {
       isError: false,
     })
   }
+  async getPostListAction() {
+    const getData = await getPostList();
+    if (getData && getData.length > 0) {
+      this.setState({
+        postList: [...getData]
+      })
+    }
+  }
   render() {
     const {
       title,
       body,
+      postList
     } = this.state;
     return (
       <div className="user-container">
@@ -70,8 +82,10 @@ class UserComponent extends Component {
         >
           Click me to home page
         </Button>
-        <hr />
-        {/* <PostListComponent /> */}
+        <PostListComponent
+          postList={postList}
+          navigate={this.props.navigate}
+        />
       </div>
     );
   }
