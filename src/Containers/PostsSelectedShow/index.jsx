@@ -1,5 +1,5 @@
 import PostComponent from "./components";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams, } from "react-router-dom";
 
 const PostComponentWithRouter = () => {
     let getLocation = useLocation();

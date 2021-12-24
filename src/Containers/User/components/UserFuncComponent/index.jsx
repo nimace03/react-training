@@ -4,20 +4,13 @@ import './style.scss';
 
 const UserFuncComponent = (props) => {
   const [userFuncObj, handleUserObjChange] = useState({
-    fullName: "",
-    dateOfBrith: "",
-    occupation: "",
+    name: "",
     email: "",
-    address: "",
-    phoneNo: "",
+    userAddress: "",
+    phone: "",
+    userCompany: "",
     isError: false,
   });
-  useEffect(() => {
-    if (props.isSubmittedData) {
-      message.success("User data store successfully.")
-      props.resetSubmittedData();
-    }
-  }, [props])
   const handleChange = (key, value) => {
     handleUserObjChange({
       ...userFuncObj,
@@ -27,40 +20,36 @@ const UserFuncComponent = (props) => {
   }
   const submitAction = () => {
     const {
-      fullName,
-      dateOfBrith,
-      occupation,
+      name,
       email,
-      address,
-      phoneNo,
+      userAddress,
+      phone,
+      userCompany,
     } = userFuncObj;
-    if (!(fullName && dateOfBrith && occupation && email && address && phoneNo))
+    if (!(name && email && userAddress && phone && userCompany))
       handleUserObjChange({ ...userFuncObj, isError: true });
     props.submitAction({
-      fullName,
-      dateOfBrith,
-      occupation,
+      name,
       email,
-      address,
-      phoneNo,
+      userAddress,
+      phone,
+      userCompany,
     });
     handleUserObjChange({
-      fullName: "",
-      dateOfBrith: "",
-      occupation: "",
+      name: "",
       email: "",
-      address: "",
-      phoneNo: "",
+      userAddress: "",
+      phone: "",
+      userCompany: "",
       isError: false,
     });
   }
   const {
-    fullName,
-    dateOfBrith,
-    occupation,
+    name,
     email,
-    address,
-    phoneNo,
+    userAddress,
+    phone,
+    userCompany,
     isError,
   } = userFuncObj;
   return (
@@ -70,19 +59,7 @@ const UserFuncComponent = (props) => {
           <label className="user-label">Full Name </label>
         </Col>
         <Col span={12}>
-          <input className="user-input" type="text" value={fullName} onChange={(event) => handleChange("fullName", event.target.value)} />
-        </Col>
-        <Col span={12}>
-          <label className="user-label">Date Of Brith </label>
-        </Col>
-        <Col span={12}>
-          <input className="user-input" type="text" value={dateOfBrith} onChange={(event) => handleChange("dateOfBrith", event.target.value)} />
-        </Col>
-        <Col span={12}>
-          <label className="user-label">Occupation </label>
-        </Col>
-        <Col span={12}>
-          <input className="user-input" type="text" value={occupation} onChange={(event) => handleChange("occupation", event.target.value)} />
+          <input className="user-input" type="text" value={name} onChange={(event) => handleChange("name", event.target.value)} />
         </Col>
         <Col span={12}>
           <label className="user-label">Email </label>
@@ -94,13 +71,19 @@ const UserFuncComponent = (props) => {
           <label className="user-label">Address </label>
         </Col>
         <Col span={12}>
-          <input className="user-input" type="text" value={address} onChange={(event) => handleChange("address", event.target.value)} />
+          <input className="user-input" type="text" value={userAddress} onChange={(event) => handleChange("userAddress", event.target.value)} />
         </Col>
         <Col span={12}>
           <label className="user-label">Phone Number </label>
         </Col>
         <Col span={12}>
-          <input className="user-input" type="text" value={phoneNo} onChange={(event) => handleChange("phoneNo", event.target.value)} />
+          <input className="user-input" type="text" value={phone} onChange={(event) => handleChange("phone", event.target.value)} />
+        </Col>
+        <Col span={12}>
+          <label className="user-label">Company Name </label>
+        </Col>
+        <Col span={12}>
+          <input className="user-input" type="text" value={userCompany} onChange={(event) => handleChange("userCompany", event.target.value)} />
         </Col>
         <Col span={24}>
           {isError && <label className="user-error">Please complete all details</label>}

@@ -4,48 +4,54 @@ import "antd/dist/antd.css";
 import autoBind from "react-autobind";
 import { Button, message, Spin } from "antd";
 import { LoadingOutlined } from '@ant-design/icons';
+
 // import UserComponent from "../User";
 import UserDataListComponent from "./UserList";
+import UserEditModal from "../../Common/userEditModal";
+import PreviewComponent from "../../Common/previewCompnent";
+import AddUserComponent from "./UserFuncComponent";
 
-import { getUserList, updatedUserPost } from "../api";
+import { getUserList } from "../api";
+
 const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
+
 class UserComponent extends Component {
   constructor(props) {
     super(props);
     // const userData = JSON.parse('[{"fullName":"nimesh","dateOfBrith":"11/11/11","occupation":"frontend","email":"nimesh@mail.com","address":"ktm","phoneNo":"1234567890"},{"fullName":"Leanne Graham","dateOfBrith":"11/22/11","occupation":"frontend","email":"Sincere@april.biz","address":"Gwenborough","phoneNo":"567890"},{"fullName":"Ervin Howell","dateOfBrith":"22/11/11","occupation":"software developer","email":"Shanna@melissa.tv","address":"Wisokyburgh","phoneNo":"23456789"},{"fullName":"Clementine Bauch","dateOfBrith":"12/6/21","occupation":"QA","email":"Nathan@yesenia.net","address":"McKenziehaven","phoneNo":"555-5555"},{"fullName":"Patricia Lebsack","dateOfBrith":"4/5/21","occupation":"frontend","email":"Julianne.OConner@kory.org","address":"South Elvis","phoneNo":"53919-4257"},{"fullName":"Chelsey Dietrich","dateOfBrith":"2/4/21","occupation":"Manager","email":"Lucio_Hettinger@annie.ca","address":"Roscoeview","phoneNo":"33263"}]');
     this.state = {
-      userListData: [],
-      postListData: [],
-      previewData: null,
-      previewVisibility: false,
-      isSubmittedData: false,
-      succeededFetchUserData: false,
-      succeededUpdateUserData: false,
       isLoading: false,
+      previewData: null,
       selectedUserData: null,
       userEditVisibility: false,
-      historyState: null,
+      previewVisibility: false,
     }
     autoBind(this);
   }
   componentDidMount() {
-    // this.getAllUserData();
-    console.log(this.props)
+    // this.getAllUserDataAsync();
   }
   componentDidUpdate(prevProps) {
-    if (this.state.succeededFetchUserData !== prevProps.succeededFetchUserData &&
-      this.state.succeededFetchUserData) {
-      this.setState({
-        succeededFetchUserData: false,
-      })
+    if (this.props.succeededGetUserData !== prevProps.succeededGetUserData &&
+      this.props.succeededGetUserData) {
+      this.props.resetUserDataList();
       message.success("Successfully fetch user data.")
     }
-    if (this.state.succeededUpdateUserData !== prevProps.succeededUpdateUserData &&
-      this.state.succeededUpdateUserData) {
-      this.setState({
-        succeededUpdateUserData: false,
-      })
-      message.success("Successfully added New user data.")
+    if (this.props.succeededUpdatedUserData !== prevProps.succeededUpdatedUserData &&
+      this.props.succeededUpdatedUserData) {
+      message.success("User data updated.");
+      this.userEditVisibilityAction();
+      this.props.resetUpdateUserDataList();
+    }
+    if (this.props.succeededDeleteUserData !== prevProps.succeededDeleteUserData &&
+      this.props.succeededDeleteUserData) {
+      message.success("User data deleted.");
+      this.props.resetDeleteUserData();
+    }
+    if (this.props.succeededAddUserData !== prevProps.succeededAddUserData &&
+      this.props.succeededAddUserData) {
+      message.success("User data Added.");
+      this.props.resetAddUserData();
     }
   }
   previewVisibilityAction(previewData = {}) {
@@ -60,86 +66,21 @@ class UserComponent extends Component {
     })
   }
   saveUserDataAction(userData) {
-    const userListData = [...this.state.userListData];
-    userListData.push(userData);
-    this.setState({
-      userListData: [...userListData],
-      isSubmittedData: true,
-    });
-  }
-  resetSubmittedData() {
-    this.setState({
-      isSubmittedData: false,
-    })
-  }
-  getAllUserData() {
-    this.setState({ isLoading: true, })
-    const getUserData = getUserList();
-    getUserData.then((data) => {
-      if (data && data.length > 0) {
-        this.setState({
-          userListData: [...data.map(list => ({
-            ...list,
-          }))],
-          succeededFetchUserData: true,
-          isLoading: false,
-        });
-      }
-    })
+    this.props.addUserData(userData);
   }
   async getAllUserDataAsync() {
     this.setState({ isLoading: true, })
     const getUserData = await getUserList();
     if (getUserData && getUserData.length > 0) {
-      this.setState({
-        userListData: [...getUserData.map(list => ({
-          ...list,
-          userAddress: list.address && list.address.city,
-          userCompany: list.company && list.company.name,
-        }))],
-        succeededFetchUserData: true,
-      });
-    }
-    this.setState({ isLoading: false, })
-  }
-  async updateUserDataAsync(data) {
-    this.setState({ isLoading: true, })
-    const payload = {
-      title: data.title,
-      body: data.body,
-      userId: 1,
-    }
-    const updatedUserData = await updatedUserPost(payload);
-    if (updatedUserData) {
-      const updateduserListData = [...this.state.userListData];
-      updateduserListData.push(updatedUserData);
-      this.setState({
-        userListData: [...updateduserListData.map(list => ({
-          ...list,
-          fullName: list.name,
-        }))],
-        succeededUpdateUserData: true,
-      });
+      this.props.succeededGetUserDataList(getUserData);
     }
     this.setState({ isLoading: false, })
   }
   deleteUserListAction(userId) {
-    let updatedUserList = [...this.state.userListData];
-    updatedUserList = updatedUserList.filter(list => list.id !== userId);
-    this.setState({
-      userListData: [...updatedUserList],
-    })
-    message.success("User data deleted.");
+    this.props.deleteUserData(userId);
   }
   updateSelectedUser() {
-    let updatedUserList = [...this.state.userListData];
-    let getUserIndex = updatedUserList.findIndex(list => list.id === this.state.selectedUserData.id);
-    updatedUserList[getUserIndex] = this.state.selectedUserData;
-    this.setState({
-      userListData: [...updatedUserList],
-    });
-    message.success("User data updated.");
-    this.userEditVisibilityAction();
+    this.props.updateUserDataList(this.state.selectedUserData);
   }
   handleChangeEditUser(key, value) {
     this.setState({
@@ -156,9 +97,9 @@ class UserComponent extends Component {
     })
   }
   render() {
-    const { previewData,
+    const {
+      previewData,
       previewVisibility,
-      isSubmittedData,
       isLoading,
       userEditVisibility,
     } = this.state;
@@ -166,18 +107,16 @@ class UserComponent extends Component {
       <div className="app-container">
         <Spin className="app-loading" indicator={antIcon} spinning={isLoading} />
         <Button onClick={this.getAllUserDataAsync}>Api Call</Button>
-        {/* <UserFuncComponent
+        <AddUserComponent
           submitAction={this.saveUserDataAction}
-          isSubmittedData={isSubmittedData}
-          resetSubmittedData={this.resetSubmittedData}
-        /> */}
+        />
         <UserDataListComponent
-          userListData={this.state.userListData}
+          userListData={this.props.userDataList}
           editUserListAction={this.userEditVisibilityAction}
           deleteUserListAction={this.deleteUserListAction}
           previewVisibilityAction={this.previewVisibilityAction}
         />
-        {/* {previewVisibility &&
+        {previewVisibility &&
           <PreviewComponent
             previewObj={previewData}
             modalVisibility={this.previewVisibilityAction}
@@ -191,7 +130,7 @@ class UserComponent extends Component {
             handleChange={this.handleChangeEditUser}
             modalVisibility={this.userEditVisibilityAction}
           />
-        } */}
+        }
       </div>
     );
   }

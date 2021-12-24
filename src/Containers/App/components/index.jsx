@@ -12,6 +12,10 @@ class App extends Component {
     super(props);
     autoBind(this);
   }
+  componentDidMount() {
+    // const getState = this.props.getStore.getState("AppState");
+    console.log(this.props.getStore)
+  }
   componentDidUpdate() {
     console.log("Location updated in App")
     console.log(this.props)
@@ -29,7 +33,7 @@ class App extends Component {
           {this.props.history &&
             this.props.history.pathname === "/posts" &&
             <div className="app-header-list">
-              <Link to="/posts/1">Post get 1</Link>
+              <Link to="/post-details/1">Post get 1</Link>
             </div>
           }
         </div>
@@ -44,7 +48,7 @@ class App extends Component {
             element={<PostComponent />}
           />
           <Route
-            path="/posts/:id"
+            path="/post-details/:post_id"
             element={<PostSelectedComponent />}
           />
         </Routes>

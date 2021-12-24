@@ -1,5 +1,5 @@
 import { Component } from "react";
-import { Row, Col, Button } from "antd";
+import { Row, Col, Button, message } from "antd";
 import autoBind from "react-autobind";
 import PostListComponent from "./postList";
 import { getPostList } from "../api";
@@ -18,6 +18,13 @@ class UserComponent extends Component {
   componentDidMount() {
     console.log(this.props)
     this.getPostListAction();
+  }
+  componentDidUpdate(prevProps) {
+    if (this.props.isSucceededGetPostData !== prevProps.isSucceededGetPostData &&
+      this.props.isSucceededGetPostData) {
+      this.props.resetGetPostData();
+      message.success("Successfully fetch post list.");
+    }
   }
   handleClick() {
     const {
@@ -42,9 +49,7 @@ class UserComponent extends Component {
   async getPostListAction() {
     const getData = await getPostList();
     if (getData && getData.length > 0) {
-      this.setState({
-        postList: [...getData]
-      })
+      this.props.succeededGetPostData(getData);
     }
   }
   render() {
@@ -82,8 +87,9 @@ class UserComponent extends Component {
         >
           Click me to home page
         </Button>
+        <label style={{ marginLeft: "20px" }} >App State Value : {this.props.AppName}</label>
         <PostListComponent
-          postList={postList}
+          postList={this.props.postDataList}
           navigate={this.props.navigate}
         />
       </div>

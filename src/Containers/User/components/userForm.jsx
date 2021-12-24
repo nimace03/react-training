@@ -1,7 +1,7 @@
 import { Component } from "react";
 import { Row, Col, Button } from "antd";
 import autoBind from "react-autobind";
-import './style.scss';
+import '../style.scss';
 
 class UserComponent extends Component {
   constructor(props) {

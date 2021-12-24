@@ -21,7 +21,7 @@ const PostListComponent = (props) => {
                 <div className="user-action">
                     <ZoomInOutlined
                         className="user-preview"
-                        onClick={() => props.navigate(`/posts/${record.id}`)}
+                        onClick={() => props.navigate(`/post-details/${record.id}`)}
                     />
                 </div>
         },

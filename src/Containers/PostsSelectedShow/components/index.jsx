@@ -3,7 +3,7 @@ import autoBind from "react-autobind";
 import { getSelectedPost } from '../../Posts/api'
 import '../style.scss';
 
-class UserComponent extends Component {
+class PostSelectComponent extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -13,9 +13,8 @@ class UserComponent extends Component {
     autoBind(this);
   }
   componentDidMount() {
-    console.log(this.props.urlParam.id);
-    if (this.props.urlParam && this.props.urlParam.id) {
-      this.getSelectedPostAction(this.props.urlParam.id)
+    if (this.props.urlParam && this.props.urlParam.id > 0) {
+      this.getSelectedPostAction(this.props.urlParam.post_id)
     }
   }
   async getSelectedPostAction(postId) {
@@ -32,8 +31,13 @@ class UserComponent extends Component {
       title,
       body,
     } = this.state;
+    if (!(this.props.urlParam && this.props.urlParam.id)) {
+      this.props.navigate("/");
+      return "";
+    }
     return (
       <div className="user-container">
+        <button onClick={() => this.props.navigate("/")}>To Home</button>
         <h1>{title}</h1>
         <h1>{body}</h1>
       </div>
@@ -41,4 +45,4 @@ class UserComponent extends Component {
   }
 }
 
-export default UserComponent;
+export default PostSelectComponent;
